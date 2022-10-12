@@ -1,0 +1,52 @@
+@import "../fonts/Inter_Web/inter.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    .tag {
+        @apply px-2 py-1 leading-none text-xs rounded-md;
+    }
+
+    .tag--laravel {
+        @apply bg-white;
+        color: #f9322c;
+    }
+
+    .tag--design {
+        background-color: #248d5c;
+    }
+
+    .tag--php {
+        @apply text-black;
+        background-color: #828bb7;
+    }
+
+    .tag--tailwind-css {
+        @apply text-black;
+        background-color: #01b7d6;
+    }
+
+    .tag--nuxtjs {
+        @apply text-black;
+        background-color: #00dc82;
+    }
+
+    .tag--bootstrap {
+        @apply text-white;
+        background-color: #7952b3;
+    }
+
+    .tag--javascript {
+        @apply text-black;
+        background-color: #f7df1e;
+    }
+
+    .tag--wordpress {
+        @apply text-white;
+        background-color: #00749C;
+    }
+
+}

@@ -1,0 +1,110 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  MYSQL_ROOT_PASSWORD: "my-super-secret-pw"
+  MYSQL_USER: "root"
+  MYSQL_PASSWORD: "password"
+  MYSQL_DATABASE: "laravel"
+  MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  TZ: "Europe/Berlin"
+  DB_HOST: "mysql"
+
+build-composer:
+  stage: build
+  image: poldixd/php:8.1
+  cache:
+      paths:
+        - vendor/
+  script:
+    - composer install --no-interaction
+  artifacts:
+    paths:
+      - vendor/
+    expire_in: 1 hour
+    when: always
+
+build-assets:
+  stage: build
+  image: node:18
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - public/
+    expire_in: 1 hour
+    when: always
+
+static_analysis:
+  stage: test
+  image: poldixd/php:8.1
+  dependencies:
+    - build-composer
+  script:
+    - ./vendor/bin/phpstan analyse
+
+test:
+  stage: test
+  image: poldixd/php:8.1
+  coverage: /^\s*Lines:\s*\d+.\d+\%/
+  dependencies:
+    - build-composer
+    - build-assets
+  services:
+    - name: mysql:8
+      command: ["--default-authentication-plugin=mysql_native_password"]
+  artifacts:
+    paths:
+      - ./bootstrap
+      - ./storage/logs
+      - ./.env
+    expire_in: 1 days
+    when: on_failure
+  before_script:
+    - cp .env.example .env
+    - php artisan key:generate
+  script:
+    - php vendor/bin/pest --coverage
+
+deploy:
+  stage: deploy
+  image: alpine:3.14
+  dependencies:
+    - build-assets
+  environment:
+    name: staging
+    url: https://nils.li/
+  before_script:
+    - apk add --update openssh-client rsync
+  script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - rsync --version
+    - >
+      rsync
+      -rltzuvOog
+      --delete
+      --exclude-from=.rsync_exclude
+      ./ $SSH_USERNAME@$SSH_HOST:$SSH_PATH
+    - >
+      ssh -t -t $SSH_USERNAME@$SSH_HOST
+      "cd $SSH_PATH &&
+      $SSH_PHP_PATH composer.phar self-update &&
+      $SSH_PHP_PATH composer.phar install --no-interaction --optimize-autoloader --no-dev &&
+      $SSH_PHP_PATH artisan down --retry=60 &&
+      $SSH_PHP_PATH artisan optimize:clear &&
+      $SSH_PHP_PATH artisan storage:link &&
+      $SSH_PHP_PATH artisan migrate --force &&
+      $SSH_PHP_PATH artisan optimize &&
+      $SSH_PHP_PATH artisan up &&
+      $SSH_PHP_PATH artisan media-library:regenerate --force &&
+      exit"
