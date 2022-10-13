@@ -9,7 +9,7 @@
     <!-- Button -->
     <button
         x-ref="toggle"
-        @click="showMobile = ! showMobile"
+        @click="showMobile = ! showMobile; window.refreshImages()"
         type="button"
         role="switch"
         :aria-checked="showMobile"
