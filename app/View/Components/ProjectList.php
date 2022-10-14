@@ -17,9 +17,18 @@ class ProjectList extends Component
      */
     public function __construct()
     {
-        $this->splitedProjects = Project::published()
+        /**
+         * @todo Find a better way…
+         */
+        $this->splitedProjects = collect([
+            collect(),
+            collect(),
+        ]);
+
+        Project::published()
+            ->orderByDesc('published_at')
             ->get()
-            ->split(2);
+            ->each(fn (Project $project, int $key) => $this->splitedProjects->get($key % 2)->push($project));
     }
 
     /**
