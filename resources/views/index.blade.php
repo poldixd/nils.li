@@ -1,3 +1,7 @@
+@push('head')
+    <title>Nils Poltmann • Webentwickler</title>
+@endpush
+
 <x:layouts.app
     x-data="{ showMobile: $persist(false) }"
 >

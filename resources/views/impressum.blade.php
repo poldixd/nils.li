@@ -1,4 +1,5 @@
 @push('head')
+    <title>Impressum – Nils Poltmann • Webentwickler</title>
     <meta name="robots" content="noindex, follow">
 @endpush
 
