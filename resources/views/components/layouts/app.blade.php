@@ -40,14 +40,29 @@
                 <ul class="flex items-center justify-center space-x-4">
                     <li>
                         <a
+                            href="{{ route('index') }}"
+                            @class([
+                                'hover:text-slate-400 transition ease-in-out',
+                                'font-bold' => request()->routeIs('index')
+                            ])
+                        >Start</a>
+                    </li>
+                    <li>
+                        <a
                             href="{{ route('impressum') }}"
-                            class="hover:text-slate-400 transition ease-in-out"
+                            @class([
+                                'hover:text-slate-400 transition ease-in-out',
+                                'font-bold' => request()->routeIs('impressum')
+                            ])
                         >Impressum</a>
                     </li>
                     <li>
                         <a
                             href="{{ route('datenschutzerklaerung') }}"
-                            class="hover:text-slate-400 transition ease-in-out"
+                            @class([
+                                'hover:text-slate-400 transition ease-in-out',
+                                'font-bold' => request()->routeIs('datenschutzerklaerung')
+                            ])
                         >Datenschutzerklärung</a>
                     </li>
                 </ul>
