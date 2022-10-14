@@ -29,7 +29,7 @@
         x-ref="section-work"
         class="bg-gray-200 dark:bg-gray-800 min-h-screen py-16 border-t border-gray-400 dark:border-gray-600 relative"
     >
-        <div class="max-w-7xl mx-auto mb-48">
+        <div class="px-4 xl:px-0 max-w-7xl mx-auto mb-48">
             <div class="flex justify-between items-center">
                 <h2 class="text-4xl md:text-6xl font-inter-var font-bold tracking-tight mb-8">Work</h2>
                 <div class="flex items-center space-x-2">
