@@ -23,7 +23,7 @@ window.refreshImages = () => {
     }
 
     window.requestAnimationFrame(() => {
-        for (i = 0; i < images.length; i++) {
+        for (let i = 0; i < images.length; i++) {
             let size = images[i].getBoundingClientRect().width;
             let sizes = Math.ceil(size / window.innerWidth * 100) + 'vw';
             images[i].sizes = sizes;
