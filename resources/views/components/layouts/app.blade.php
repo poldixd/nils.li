@@ -65,6 +65,13 @@
                             ])
                         >Datenschutzerklärung</a>
                     </li>
+                    <li>
+                        <a
+                            rel="me"
+                            href="https://mastodon.online/@poldi"
+                            class="hover:text-slate-400 transition ease-in-out"
+                        >Mastodon</a>
+                    </li>
                 </ul>
             </nav>
             <div>
