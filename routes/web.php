@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::view('/', 'index')->name('index');
-Route::permanentRedirect('/hilfe', 'https://github.com/poldixd/rustdesk/releases/download/nightly/rustdesk-1.2.4-x86_64.exe');
 Route::view('/impressum', 'impressum')->name('impressum');
 Route::view('/datenschutzerklaerung', 'datenschutzerklaerung')->name('datenschutzerklaerung');
