@@ -14,7 +14,7 @@ variables:
 
 build-composer:
   stage: build
-  image: poldixd/php:8.1
+  image: poldixd/php:8.2
   cache:
       paths:
         - vendor/
@@ -28,7 +28,7 @@ build-composer:
 
 build-assets:
   stage: build
-  image: node:18
+  image: node:20
   cache:
     paths:
       - node_modules/
@@ -44,7 +44,7 @@ build-assets:
 
 static_analysis:
   stage: test
-  image: poldixd/php:8.1
+  image: poldixd/php:8.2
   dependencies:
     - build-composer
   script:
@@ -52,7 +52,7 @@ static_analysis:
 
 test:
   stage: test
-  image: poldixd/php:8.1
+  image: poldixd/php:8.2
   coverage: /^\s*Lines:\s*\d+.\d+\%/
   dependencies:
     - build-composer
@@ -75,7 +75,7 @@ test:
 
 deploy:
   stage: deploy
-  image: alpine:3.14
+  image: alpine:3
   dependencies:
     - build-assets
   environment:
