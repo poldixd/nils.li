@@ -72,6 +72,8 @@ test:
     - php vendor/bin/pest --coverage
 
 deploy:
+  only:
+    - main
   stage: deploy
   image: alpine:3
   dependencies:
