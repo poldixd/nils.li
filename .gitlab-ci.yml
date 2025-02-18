@@ -14,7 +14,7 @@ variables:
 
 build-composer:
   stage: build
-  image: poldixd/php:8.2
+  image: poldixd/php:8.3
   cache:
       paths:
         - vendor/
@@ -44,7 +44,7 @@ build-assets:
 
 static_analysis:
   stage: test
-  image: poldixd/php:8.2
+  image: poldixd/php:8.3
   dependencies:
     - build-composer
   script:
@@ -52,7 +52,7 @@ static_analysis:
 
 test:
   stage: test
-  image: poldixd/php:8.2
+  image: poldixd/php:8.3
   coverage: /^\s*Lines:\s*\d+.\d+\%/
   dependencies:
     - build-composer
