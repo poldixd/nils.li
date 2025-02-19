@@ -59,5 +59,4 @@ class ProjectFactory extends Factory
         $project->addMedia(resource_path('images/placeholders/desktop.png'))->preservingOriginal()->toMediaCollection('image_desktop')->responsiveImages();
         $project->addMedia(resource_path('images/placeholders/mobile.png'))->preservingOriginal()->toMediaCollection('image_mobile')->responsiveImages();
     }
- 
 }
