@@ -10,7 +10,7 @@ it('has a index page', function () {
 
 it('sees a new project', function () {
     Project::factory()->create([
-        'title' => 'Foo Project'
+        'title' => 'Foo Project',
     ]);
 
     get('/')
@@ -20,7 +20,7 @@ it('sees a new project', function () {
 
 it('doesn\'t sees drafted project', function () {
     Project::factory()->drafted()->create([
-        'title' => 'Foo Draft Project'
+        'title' => 'Foo Draft Project',
     ]);
 
     get('/')
