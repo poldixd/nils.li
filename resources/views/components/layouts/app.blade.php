@@ -35,7 +35,7 @@
         <main class="flex-1">
             {{ $slot }}
         </main>
-        <footer class="bg-gray-900 border-t border-gray-600 py-12 flex items-center justify-center space-x-4">
+        <footer class="bg-gray-900 border-t border-gray-600 py-12 flex items-center justify-center space-x-4 text-white">
             <nav>
                 <ul class="flex items-center justify-center space-x-4">
                     <li>
