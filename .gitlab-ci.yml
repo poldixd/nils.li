@@ -1,25 +1,29 @@
 stages:
-  - build
+  - build-composer
+  - build-assets
   - test
   - deploy
 
+cache:
+  key:
+    files:
+      - package-lock.json
+      - composer.lock
+  paths:
+    - vendor/
+    - node_modules/
+
 variables:
-  MYSQL_ROOT_PASSWORD: "my-super-secret-pw"
-  MYSQL_USER: "root"
-  MYSQL_PASSWORD: "password"
-  MYSQL_DATABASE: "laravel"
-  MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-  TZ: "Europe/Berlin"
-  DB_HOST: "mysql"
+  MYSQL_ROOT_PASSWORD: secret
+  MYSQL_DATABASE: "homestead"
 
 build-composer:
-  stage: build
-  image: poldixd/php:8.3
-  cache:
-      paths:
-        - vendor/
+  stage: build-composer
+  image:
+    name: poldixd/php:8.4
+    pull_policy: if-not-present
   script:
-    - composer install --no-interaction
+    - composer install --prefer-dist --no-progress --no-suggest
   artifacts:
     paths:
       - vendor/
@@ -27,13 +31,14 @@ build-composer:
     when: always
 
 build-assets:
-  stage: build
-  image: node:20
-  cache:
-    paths:
-      - node_modules/
+  stage: build-assets
+  image:
+    name: node:22
+    pull_policy: if-not-present
+  dependencies:
+    - build-composer
   before_script:
-    - npm ci
+    - npm ci --prefer-offline --no-audit
   script:
     - npm run build
   artifacts:
@@ -44,7 +49,9 @@ build-assets:
 
 static_analysis:
   stage: test
-  image: poldixd/php:8.3
+  image:
+    name: poldixd/php:8.4
+    pull_policy: if-not-present
   dependencies:
     - build-composer
   script:
@@ -52,7 +59,9 @@ static_analysis:
 
 test:
   stage: test
-  image: poldixd/php:8.3
+  image:
+    name: poldixd/php:8.4
+    pull_policy: if-not-present
   coverage: /^\s*Lines:\s*\d+.\d+\%/
   dependencies:
     - build-composer
@@ -68,8 +77,9 @@ test:
     - cp .env.example .env
     - touch database/database.sqlite
     - php artisan key:generate
+    - php artisan about --only=environment
   script:
-    - php vendor/bin/pest --coverage
+    - ./vendor/bin/pest --colors=always --parallel $( [ "$PEST_COVERAGE" = "true" ] && echo "--coverage" ) $( [ "$PEST_BAIL" = "true" ] && echo "--bail" ) $( [ "$PEST_PROFILE" = "true" ] && echo "--profile" )
 
 deploy:
   only:
@@ -105,6 +115,7 @@ deploy:
       $SSH_PHP_PATH artisan storage:link &&
       $SSH_PHP_PATH artisan migrate --force &&
       $SSH_PHP_PATH artisan optimize &&
+      $SSH_PHP_PATH artisan filament:optimize &&
       $SSH_PHP_PATH artisan up &&
       $SSH_PHP_PATH artisan media-library:regenerate --force &&
       exit"
