@@ -30,17 +30,10 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            color: theme('colors.slate.200'),
-            'h1, h2, h3, h4, h5, h6': {
-              color: theme('colors.slate.200'),
-            },
-            'a': {
-              color: theme('colors.slate.200'),
-            },
-            'a:hover': {
-              color: theme('colors.slate.400'),
-            }
-          },
+            '--tw-prose-body': theme('colors.slate[700]'),
+            '--tw-prose-headings': theme('colors.slate[700]'),
+            '--tw-prose-bullets': theme('colors.slate[700]'),
+          }
         },
       }),
     },
