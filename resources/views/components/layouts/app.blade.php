@@ -31,8 +31,8 @@
         @endproduction
     </head>
 
-    <body {{ $attributes->merge(['class' => 'antialiased text-slate-700 dark:text-slate-200']) }}>
-        <main>
+    <body {{ $attributes->merge(['class' => 'antialiased text-slate-700 dark:text-slate-200 flex flex-col min-h-screen']) }}>
+        <main class="flex-1">
             {{ $slot }}
         </main>
         <footer class="bg-gray-900 border-t border-gray-600 py-12 flex items-center justify-center space-x-4">
